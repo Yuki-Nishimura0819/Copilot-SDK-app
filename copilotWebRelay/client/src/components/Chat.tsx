@@ -35,7 +35,7 @@ function Chat() {
     // Connect to backend WebSocket
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const wsUrl = import.meta.env.DEV
-      ? "ws://localhost:3001"
+      ? `${protocol}//${window.location.host}/ws`
       : `${protocol}//${window.location.host}`;
 
     const ws = new WebSocket(wsUrl);

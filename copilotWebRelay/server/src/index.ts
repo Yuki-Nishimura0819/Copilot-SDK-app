@@ -10,8 +10,64 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+
 const httpServer = createServer(app);
 const wss = new WebSocketServer({ server: httpServer });
+
+app.get("/", (_req, res) => {
+  res.status(200).send(`<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Copilot Web Relay</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #0d1117;
+        color: #e6edf3;
+        display: grid;
+        min-height: 100vh;
+        place-items: center;
+      }
+      main {
+        width: min(640px, calc(100vw - 32px));
+        padding: 32px;
+        border: 1px solid #30363d;
+        border-radius: 16px;
+        background: #161b22;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+      }
+      h1 {
+        margin-top: 0;
+        font-size: 1.75rem;
+      }
+      p {
+        line-height: 1.6;
+      }
+      a {
+        color: #58a6ff;
+      }
+      code {
+        padding: 0.15rem 0.35rem;
+        border-radius: 6px;
+        background: #0d1117;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Copilot Web Relay Server</h1>
+      <p>This port is the backend API and WebSocket server.</p>
+      <p>Open the client app at <a href="${frontendUrl}">${frontendUrl}</a>.</p>
+      <p>Health check: <a href="/health">/health</a></p>
+      <p>If you want a different client URL, set <code>FRONTEND_URL</code> before starting the server.</p>
+    </main>
+  </body>
+</html>`);
+});
 
 // Health check
 app.get("/health", (_req, res) => {
